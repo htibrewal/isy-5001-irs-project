@@ -27,7 +27,7 @@ def fitness_score(purchase_order: PurchaseOrder, vendor: Vendor, items_vendor_ma
     return -total_cost
 
 
-def genetic_algorithm(purchase_order: PurchaseOrder, items_vendor_map: dict[ElectricalPart, list[VendorItem]], vendors: list[Vendor], population_size: int, generations: int):
+def genetic_algorithm(purchase_order: PurchaseOrder, items_vendor_map: dict[ElectricalPart, list[VendorItem]], vendors: list[Vendor], population_size: int = 50, generations: int = 20):
     population = initialise_population(vendors, population_size)
 
     for generation in range(generations):
