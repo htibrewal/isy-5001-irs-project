@@ -3,4 +3,6 @@ models/
 
 .DS_Store
 .idea/
+
 .env
+playbook.ipynb
