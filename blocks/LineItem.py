@@ -8,3 +8,6 @@ class LineItem:
 
     def __iter__(self):
         return iter((self.electrical_part, self.quantity))
+
+    def __repr__(self):
+        return f"{self.quantity} for {self.electrical_part.name}"

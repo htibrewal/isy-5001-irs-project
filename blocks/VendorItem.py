@@ -10,7 +10,10 @@ class VendorItem:
         self.tax_percent = tax_percent
 
     def __repr__(self):
-        return f"{self.item} at the rate of {self.unit_price}"
+        return f"{self.item.name} at the rate of {self.unit_price}"
+
+    def __eq__(self, other):
+        return hasattr(other, 'item') and hasattr(other, 'vendor') and self.item == other.item and self.vendor == other.vendor
 
     # def get_unit_price(self):
     #     return self.unit_price
