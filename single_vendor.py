@@ -13,7 +13,7 @@ def initialise_population(vendors: list[Vendor], population_size: int):
     return population
 
 
-def fitness_score(purchase_order: PurchaseOrder, vendor: Vendor, items_vendor_map: dict[ElectricalPart, list[VendorItem]]):
+def single_fitness_score(purchase_order: PurchaseOrder, vendor: Vendor, items_vendor_map: dict[ElectricalPart, list[VendorItem]]):
     total_cost = 0
     for line_item in purchase_order.line_items:
         electrical_part, quantity = line_item
@@ -27,11 +27,11 @@ def fitness_score(purchase_order: PurchaseOrder, vendor: Vendor, items_vendor_ma
     return -total_cost
 
 
-def genetic_algorithm(purchase_order: PurchaseOrder, items_vendor_map: dict[ElectricalPart, list[VendorItem]], vendors: list[Vendor], population_size: int = 50, generations: int = 20):
+def single_genetic_algorithm(purchase_order: PurchaseOrder, items_vendor_map: dict[ElectricalPart, list[VendorItem]], vendors: list[Vendor], population_size: int = 50, generations: int = 20) -> Vendor:
     population = initialise_population(vendors, population_size)
 
     for generation in range(generations):
-        population = sorted(population, key=lambda vendor: fitness_score(purchase_order, vendor, items_vendor_map))
+        population = sorted(population, key=lambda vendor: single_fitness_score(purchase_order, vendor, items_vendor_map))
 
         next_population = population[:2]
 
@@ -42,5 +42,5 @@ def genetic_algorithm(purchase_order: PurchaseOrder, items_vendor_map: dict[Elec
 
         population = next_population
 
-    return sorted(population, key=lambda vendor: fitness_score(purchase_order, vendor, items_vendor_map))[0]
+    return sorted(population, key=lambda vendor: single_fitness_score(purchase_order, vendor, items_vendor_map))[0]
 

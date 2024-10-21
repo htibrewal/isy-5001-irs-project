@@ -17,7 +17,7 @@ def initialise_population(purchase_order: PurchaseOrder, items_vendor_map: dict[
     return population
 
 
-def fitness_score(purchase_order: PurchaseOrder, chromosome: dict[ElectricalPart, VendorItem]):
+def multi_fitness_score(purchase_order: PurchaseOrder, chromosome: dict[ElectricalPart, VendorItem]):
     total_cost = 0
     for line_item in purchase_order.line_items:
         electrical_part, quantity = line_item
@@ -51,11 +51,11 @@ def mutate(chromosome: dict[ElectricalPart, VendorItem], items_vendor_map: dict[
     chromosome[electrical_part] = random.choice(items_vendor_map[electrical_part])
 
 
-def genetic_algorithm(purchase_order: PurchaseOrder, items_vendor_map: dict[ElectricalPart, list[VendorItem]], population_size: int = 50, generations: int = 20):
+def multi_genetic_algorithm(purchase_order: PurchaseOrder, items_vendor_map: dict[ElectricalPart, list[VendorItem]], population_size: int = 50, generations: int = 20) -> dict[ElectricalPart, VendorItem]:
     population = initialise_population(purchase_order, items_vendor_map, population_size)
 
     for generation in range(generations):
-        population = sorted(population, key=lambda chromo: fitness_score(purchase_order, chromo))
+        population = sorted(population, key=lambda chromo: multi_fitness_score(purchase_order, chromo))
 
         # Selecting the top 2 chromosomes (Can be changed)
         next_population = population[:2]
@@ -72,5 +72,5 @@ def genetic_algorithm(purchase_order: PurchaseOrder, items_vendor_map: dict[Elec
         population = next_population
 
     # return the top solution with the best fitness score
-    return sorted(population, key=lambda chromo: fitness_score(purchase_order, chromo))[0]
+    return sorted(population, key=lambda chromo: multi_fitness_score(purchase_order, chromo))[0]
 
