@@ -11,12 +11,14 @@ load_dotenv()
 
 def main():
     electrical_parts = fetch_electrical_parts()
+    print(f"No of electrical parts = {len(electrical_parts.keys())}")
 
     # load purchase order data
     purchase_order_data = load_purchase_order_data()
 
     # build objects
     vendors: dict[str, Vendor] = fetch_vendors(purchase_order_data)
+    print(f"No of vendors = {len(vendors.keys())}")
 
     items_vendor_map = fetch_vendor_items(purchase_order_data, electrical_parts, vendors)
 
