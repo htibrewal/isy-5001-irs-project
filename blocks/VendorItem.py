@@ -3,23 +3,21 @@ from blocks.Vendor import Vendor
 
 
 class VendorItem:
-    def __init__(self, item: ElectricalPart, vendor: Vendor, unit_price: float, tax_percent: float):
+    def __init__(self, item: ElectricalPart, vendor: Vendor, unit_price: float, tax_percent: float, delivery_days: int):
         self.item = item
         self.vendor = vendor
         self.unit_price = unit_price
         self.tax_percent = tax_percent
+        self.delivery_days = delivery_days
 
     def __repr__(self):
-        return f"{self.item.name} at the rate of {self.unit_price}"
+        return f"{self.item.name} | Price = {self.unit_price: .2f} | Delivery Days = {self.delivery_days}"
 
     def __eq__(self, other):
         return hasattr(other, 'item') and hasattr(other, 'vendor') and self.item == other.item and self.vendor == other.vendor
 
-    # def get_unit_price(self):
-    #     return self.unit_price
-
-    # def part_matches(self, part: ElectricalPart):
-    #     return self if part == self.item else None
-
     def calculate_price(self, quantity: int):
         return self.unit_price * (1 + self.tax_percent/100) * quantity
+
+    def get_delivery_days(self):
+        return self.delivery_days
