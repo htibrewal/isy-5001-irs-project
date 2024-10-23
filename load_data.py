@@ -46,10 +46,22 @@ def fetch_vendors(purchase_order_data: pd.DataFrame) -> dict[str, Vendor]:
     return vendors
 
 
+def add_days_difference(df, start_date, end_date, diff_key):
+    df[start_date] = pd.to_datetime(df[start_date])
+    df[end_date] = pd.to_datetime(df[end_date])
+
+    df[diff_key] = (df[[start_date, end_date]].max(axis=1) - df[[start_date, end_date]].min(axis=1)).dt.days
+
+
 def fetch_vendor_items(purchase_order_data: pd.DataFrame, electrical_parts: dict[str, ElectricalPart], vendors: dict[str, Vendor]) -> dict[ElectricalPart, list[VendorItem]]:
     items_vendor_map = dict()
 
-    for _, line_item in purchase_order_data.iterrows():
+    add_days_difference(purchase_order_data, 'DOC_DATE', 'DELIVERY_DATE', 'DELIVERY_DAYS')
+
+    item_vendor_grouped_data = purchase_order_data.groupby(['ITEM_CODE_CLEANED', 'SUPPLIER_CODE'])[['PRICE', 'DELIVERY_DAYS']].mean().reset_index()
+    item_vendor_grouped_data['DELIVERY_DAYS'] = item_vendor_grouped_data['DELIVERY_DAYS'].abs().astype(int)
+
+    for _, line_item in item_vendor_grouped_data.iterrows():
         item_code = line_item['ITEM_CODE_CLEANED']
         vendor_code = line_item['SUPPLIER_CODE']
 
@@ -59,8 +71,8 @@ def fetch_vendor_items(purchase_order_data: pd.DataFrame, electrical_parts: dict
         if electrical_part not in items_vendor_map:
             items_vendor_map[electrical_part] = []
 
-        tax_percent = line_item['TAX_AMOUNT(LC)']/line_item['ITEM_VALUE'] * 100
-        vendor_item = VendorItem(electrical_part, vendor, line_item['PRICE'], tax_percent)
+        # tax_percent = line_item['TAX_AMOUNT(LC)']/line_item['ITEM_VALUE'] * 100
+        vendor_item = VendorItem(electrical_part, vendor, line_item['PRICE'], 18, line_item['DELIVERY_DAYS'])
 
         if vendor_item not in items_vendor_map[electrical_part]:
             items_vendor_map[electrical_part].append(vendor_item)
