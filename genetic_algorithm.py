@@ -19,7 +19,7 @@ def compute_overall_score(
     if optimisation == OptimisationType.COST:
         return -1 * np.sum(np.array(list(score_dict.values())))
     else:
-        return -1 * abs(np.mean(np.array(list(score_dict.values())))).astype(int)
+        return -1 * round(np.mean(np.array(list(score_dict.values()))))
 
 
 class GA(ABC):
