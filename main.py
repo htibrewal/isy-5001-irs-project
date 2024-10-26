@@ -47,8 +47,7 @@ def main():
     for electrical_part, vendor_item in multiple_vendors.items():
         print(f"{electrical_part} -> {vendor_item.vendor}")
 
-    cost = -1 * multiple_vendor_ga.compute_fitness_score(purchase_order, multiple_vendors)
-    print(f"Cost = {cost: .2f}")
+    print(multiple_vendor_ga.print_fitness_score(purchase_order, multiple_vendors))
 
 
     ## Delivery Days
@@ -68,8 +67,7 @@ def main():
     for electrical_part, vendor_item in multiple_vendors.items():
         print(f"{electrical_part} -> {vendor_item.vendor}")
 
-    days = -1 * multiple_vendor_ga.compute_fitness_score(purchase_order, multiple_vendors, optimisation=optimisation)
-    print(f"Delivery in Days = {days}")
+    print(multiple_vendor_ga.print_fitness_score(purchase_order, multiple_vendors, optimisation=optimisation))
 
 
 if __name__ == '__main__':

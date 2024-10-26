@@ -29,16 +29,16 @@ class MultiVendorGA(GA):
         chromosome: dict[ElectricalPart, VendorItem],
         optimisation: OptimisationType = OptimisationType.COST
     ) -> dict[ElectricalPart, float]:
-        score = dict()
+        individual_scores = dict()
         for line_item in purchase_order.line_items:
             electrical_part, quantity = line_item
             vendor_item = chromosome[electrical_part]
 
-            score[electrical_part] = vendor_item.calculate_price(quantity)\
+            individual_scores[electrical_part] = vendor_item.calculate_price(quantity)\
                 if optimisation == OptimisationType.COST\
                 else vendor_item.get_delivery_days()
 
-        return score
+        return individual_scores
 
 
     def compute_fitness_score(
@@ -49,6 +49,20 @@ class MultiVendorGA(GA):
     ) -> float:
         score_dict = self._get_fitness_score(purchase_order, chromosome, optimisation)
         return compute_overall_score(score_dict, optimisation)
+
+
+    def print_fitness_score(
+            self,
+            purchase_order: PurchaseOrder,
+            chromosome: dict[ElectricalPart, VendorItem],
+            optimisation: OptimisationType = OptimisationType.COST
+    ):
+        fitness_score = -1 * self.compute_fitness_score(purchase_order, chromosome, optimisation=optimisation)
+
+        if optimisation == OptimisationType.COST:
+            return f"Total Cost = {fitness_score: .2f}"
+        else:
+            return f"Total Delivery Days = {fitness_score}"
 
 
     def _crossover(
