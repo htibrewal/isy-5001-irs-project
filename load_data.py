@@ -1,12 +1,9 @@
 import pandas as pd
-from dotenv import load_dotenv
 
 from blocks.ElectricalPart import ElectricalPart
 from blocks.LineItem import LineItem
 from blocks.Vendor import Vendor
 from blocks.VendorItem import VendorItem
-
-load_dotenv()
 
 def fetch_electrical_parts() -> dict[str, ElectricalPart]:
     electrical_parts_data = pd.read_csv('cleaned_datasets/electrical_parts_final.csv')
