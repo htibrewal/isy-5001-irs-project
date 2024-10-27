@@ -6,11 +6,11 @@ from load_data import build_line_items
 from optimisation_type import OptimisationType
 
 
-items_data = load_items_data()
-electrical_parts, vendors, items_vendor_map = load_ga_helper()
-multiple_vendor_ga = load_multiple_vendor_ga(items_vendor_map)
-
 def purchase_order_ga_tab():
+    items_data = load_items_data()
+    electrical_parts, vendors, items_vendor_map = load_ga_helper()
+    multiple_vendor_ga = load_multiple_vendor_ga(items_vendor_map)
+
     st.markdown("## Create your Purchase Order basket")
 
     optimizations = [(OptimisationType.COST, "Cost"), (OptimisationType.DELIVERY, "Delivery Time")]
