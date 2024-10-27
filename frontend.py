@@ -1,20 +1,18 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import warnings
-from mlxtend.frequent_patterns import apriori, association_rules
-from mlxtend.preprocessing import TransactionEncoder
 import scipy.sparse
 import joblib
 from streamlit_tags import st_tags
 from deap import base, creator, tools, algorithms
 
 from purchase_order_ga import purchase_order_ga_tab
+from vendor_recommendation import vendor_recommendation_tab
 
 # Suppress warnings
 warnings.filterwarnings("ignore", category=UserWarning)  #
@@ -79,12 +77,13 @@ data['Processed_Description'] = data['PART_DESCRIPTION'].apply(preprocess)
 st.title("Procurement Search and Recommendation System")
 
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "Description Based Discovery",
     "Apriori Recommendations",
     "Constraint Based Search",
     "Multi-Item Constraint Solver",
-    "Genetic Algorithm Purchase Order Recommender"
+    "Genetic Algorithm Purchase Order Recommender",
+    "Item-based Vendor Rating Recommender"
 ])
 
 with tab1:
@@ -252,3 +251,6 @@ with tab4:
 
 with tab5:
     purchase_order_ga_tab()
+
+with tab6:
+    vendor_recommendation_tab()
