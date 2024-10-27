@@ -8,7 +8,7 @@ from multi_vendor_ga import MultiVendorGA
 
 @st.cache_data
 def load_items_data():
-    data = pd.read_csv("data/item_data.csv", index_col=0)
+    data = pd.read_csv("cleaned_datasets/item_data.csv", index_col=0)
 
     # filtering items having more than 1 item code - TEMP CHANGES
     data = filter_items_by_count(data)

@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 from dotenv import load_dotenv
 
@@ -10,7 +9,7 @@ from blocks.VendorItem import VendorItem
 load_dotenv()
 
 def fetch_electrical_parts() -> dict[str, ElectricalPart]:
-    electrical_parts_data = pd.read_csv(os.path.join(os.getenv('PROCESSED_DATA_FOLDER_PATH'), 'electrical_parts_final.csv'))
+    electrical_parts_data = pd.read_csv('cleaned_datasets/electrical_parts_final.csv')
 
     electrical_parts = dict()
     for _, electrical_part in electrical_parts_data.iterrows():
@@ -30,7 +29,7 @@ def fetch_electrical_parts() -> dict[str, ElectricalPart]:
 
 
 def load_purchase_order_data() -> pd.DataFrame:
-    purchase_order_data = pd.read_csv(os.path.join(os.getenv('PROCESSED_DATA_FOLDER_PATH'), 'filtered_data_final.csv'))
+    purchase_order_data = pd.read_csv('cleaned_datasets/filtered_data_final_2.csv')
     return purchase_order_data
 
 
