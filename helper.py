@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import pickle
 
 from blocks.Vendor import Vendor
 from load_data import fetch_electrical_parts, load_purchase_order_data, fetch_vendors, fetch_vendor_items
@@ -37,3 +38,30 @@ def load_ga_helper():
 @st.cache_resource
 def load_multiple_vendor_ga(_items_vendor_map):
     return MultiVendorGA(_items_vendor_map)
+
+@st.cache_resource
+def load_price_rating_model():
+    price_model = pickle.load(open('models/price_svd_model.pkl', 'rb'))
+    return price_model['model']
+
+@st.cache_resource
+def load_delivery_time_rating_model():
+    delivery_time_model = pickle.load(open('models/delivery_time_svd_model.pkl', 'rb'))
+    return delivery_time_model['model']
+
+
+def get_top_vendors(model, item_code, vendors):
+    preds = []
+    for code in list(vendors.keys()):
+        prediction = model.predict(code, item_code)
+        preds.append([code, prediction.est])
+
+    predictions_df = pd.DataFrame(preds, columns=['SUPPLIER_CODE', 'RATING']).sort_values(by='RATING', ascending=False)
+    top_rated_vendors = predictions_df[:5].reset_index(drop=True)
+
+    vendor_name = top_rated_vendors['SUPPLIER_CODE'].astype(str).map(
+        lambda code: vendors[code].name if code in vendors else None
+    )
+
+    top_rated_vendors.insert(1, 'Vendor Name', vendor_name)
+    return top_rated_vendors.rename({'SUPPLIER_CODE': 'Vendor Code', 'RATING': 'Rating'}, axis=1)
