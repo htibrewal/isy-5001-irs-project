@@ -14,6 +14,7 @@ import joblib
 from streamlit_tags import st_tags
 from deap import base, creator, tools, algorithms
 
+from purchase_order_ga import purchase_order_ga_tab
 
 # Suppress warnings
 warnings.filterwarnings("ignore", category=UserWarning)  #
@@ -78,7 +79,13 @@ data['Processed_Description'] = data['PART_DESCRIPTION'].apply(preprocess)
 st.title("Procurement Search and Recommendation System")
 
 
-tab1, tab2, tab3, tab4 = st.tabs(["Description Based Discovery", "Apriori Recommendations", "Constraint Based Search", "Genetic Algorithm Multi-Item Order Constraint Solver"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    "Description Based Discovery",
+    "Apriori Recommendations",
+    "Constraint Based Search",
+    "Multi-Item Constraint Solver",
+    "Genetic Algorithm Purchase Order Recommender"
+])
 
 with tab1:
     st.write("## Item Discovery")
@@ -241,3 +248,7 @@ with tab4:
                 st.write(f"Item: {item}, Supplier: {supplier}")
         else:
             st.write("Please select at least one item.")
+
+
+with tab5:
+    purchase_order_ga_tab()
