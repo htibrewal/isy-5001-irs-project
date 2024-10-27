@@ -1,8 +1,8 @@
 data/
-
+__pycache__/
 
 .DS_Store
 .idea/
-.env
 
+.env
 playbook*.ipynb
